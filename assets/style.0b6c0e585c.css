@@ -1,0 +1,332 @@
+/* Ethical Pantry - design system
+   Paper ground, forest ink, clay accent. Japanese-first typography. */
+
+:root{
+  --paper:#faf8f4;
+  --paper-2:#f2eee6;
+  --ink:#1c2420;
+  --ink-2:#4a544e;
+  --ink-3:#6f7973;
+  --forest:#1f4535;
+  --forest-2:#2d5f49;
+  --clay:#b8703f;
+  --line:#e0d9cc;
+  --line-2:#cfc6b5;
+  --max:72rem;
+  --narrow:44rem;
+  --r:6px;
+  --fs-jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic Medium","Yu Gothic",Meiryo,sans-serif;
+  --fs-en:ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--fs-en),var(--fs-jp);
+  font-size:17px;
+  line-height:1.85;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+html[lang="ja"] body{font-family:var(--fs-jp);line-height:1.95}
+
+img{max-width:100%;height:auto}
+
+a{color:var(--forest);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{color:var(--clay)}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.25rem}
+.wrap.narrow{max-width:var(--narrow)}
+
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:1rem;top:1rem;z-index:100;background:var(--forest);color:#fff;padding:.6rem 1rem;border-radius:var(--r)}
+
+/* ---------- language bar ---------- */
+.langbar{
+  background:var(--forest);color:#f0ece2;font-size:.86rem;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  padding:.5rem 1rem;
+}
+.langbar p{margin:0}
+.langbar a{color:#fff;font-weight:600}
+.langbar button{
+  background:none;border:0;color:#cfd8d2;font-size:1.3rem;line-height:1;
+  cursor:pointer;padding:0 .3rem;
+}
+.langbar button:hover{color:#fff}
+
+/* ---------- header ---------- */
+.site-head{border-bottom:1px solid var(--line);background:var(--paper)}
+.head-inner{display:flex;align-items:center;gap:1.5rem;padding-top:1rem;padding-bottom:1rem;flex-wrap:wrap}
+
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand-mark{
+  width:30px;height:30px;flex:0 0 30px;border-radius:50% 50% 50% 6px;
+  background:linear-gradient(150deg,var(--forest),var(--forest-2) 60%,var(--clay));
+}
+.brand-text strong{display:block;font-size:1.02rem;letter-spacing:.02em;line-height:1.3}
+.brand-text small{display:block;font-size:.7rem;color:var(--ink-3);letter-spacing:.14em;text-transform:uppercase}
+html[lang="ja"] .brand-text small{letter-spacing:.06em;text-transform:none}
+
+.site-nav ul{display:flex;gap:1.4rem;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.site-nav a{color:var(--ink-2);text-decoration:none;font-size:.92rem}
+.site-nav a:hover{color:var(--clay)}
+
+.lang-switch{
+  font-size:.8rem;border:1px solid var(--line-2);border-radius:99px;
+  padding:.25rem .8rem;text-decoration:none;color:var(--ink-2);white-space:nowrap;
+}
+.lang-switch:hover{border-color:var(--forest);color:var(--forest)}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:4.5rem 0 3.5rem;
+  background:
+    radial-gradient(1100px 380px at 12% -10%, #eef2ec 0%, transparent 70%),
+    var(--paper);
+  border-bottom:1px solid var(--line);
+}
+.kicker{
+  font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--clay);margin:0 0 .9rem;font-weight:600;
+}
+html[lang="ja"] .kicker{letter-spacing:.1em;text-transform:none;font-size:.78rem}
+.hero h1{
+  font-size:clamp(1.9rem,4.6vw,3rem);line-height:1.32;margin:0 0 1.1rem;
+  max-width:22em;font-weight:700;letter-spacing:-.01em;color:var(--forest);
+}
+.hero .lead{max-width:40em;font-size:1.05rem;color:var(--ink-2);margin:0 0 2rem}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;margin:0}
+
+.btn{
+  display:inline-block;background:var(--forest);color:#fff;text-decoration:none;
+  padding:.65rem 1.5rem;border-radius:99px;font-size:.92rem;font-weight:600;
+  border:1px solid var(--forest);cursor:pointer;
+}
+.btn:hover{background:var(--forest-2);border-color:var(--forest-2);color:#fff}
+.btn.ghost{background:transparent;color:var(--forest);border-color:var(--line-2)}
+.btn.ghost:hover{border-color:var(--forest);background:transparent}
+
+/* ---------- bands ---------- */
+.band{padding:3.5rem 0;border-bottom:1px solid var(--line)}
+.band.alt{background:var(--paper-2)}
+.band h2{font-size:1.45rem;margin:0 0 .5rem;color:var(--forest);letter-spacing:-.005em}
+.section-lead{color:var(--ink-2);margin:0 0 2rem;max-width:44em}
+.more{margin:1.8rem 0 0}
+.more a{font-weight:600;font-size:.94rem;text-decoration:none}
+.more a:hover{text-decoration:underline}
+
+/* ---------- cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16.5rem,1fr));gap:1rem}
+.card{
+  display:block;background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--r);padding:1.25rem 1.3rem;text-decoration:none;color:inherit;
+  transition:border-color .15s ease, transform .15s ease;
+}
+.band.alt .card{background:var(--paper)}
+.card:hover{border-color:var(--forest);transform:translateY(-2px);color:inherit}
+.card h3{margin:0 0 .45rem;font-size:1.02rem;color:var(--forest);line-height:1.45}
+.card p{margin:0;font-size:.88rem;color:var(--ink-2);line-height:1.7}
+
+/* ---------- breadcrumbs ---------- */
+.crumbs{font-size:.8rem;color:var(--ink-3);padding:1rem 0 0}
+.crumbs a{color:var(--ink-3);text-decoration:none}
+.crumbs a:hover{color:var(--clay)}
+.crumbs .sep{margin:0 .5rem;color:var(--line-2)}
+
+/* ---------- article ---------- */
+.page{padding:1.5rem 0 4rem}
+.page h1{
+  font-size:clamp(1.6rem,3.6vw,2.3rem);line-height:1.38;margin:.6rem 0 1rem;
+  color:var(--forest);letter-spacing:-.01em;
+}
+.page .lead{font-size:1.05rem;color:var(--ink-2);margin:0 0 2.2rem;line-height:1.8}
+.page h2{
+  font-size:1.22rem;margin:2.6rem 0 .9rem;color:var(--forest);
+  padding-bottom:.4rem;border-bottom:1px solid var(--line);
+}
+.page h3{font-size:1.02rem;margin:1.9rem 0 .6rem;color:var(--ink)}
+.page p{margin:0 0 1.15rem}
+
+.ticks{list-style:none;padding:0;margin:0 0 1.4rem}
+.ticks li{position:relative;padding-left:1.4rem;margin-bottom:.55rem;line-height:1.75}
+.ticks li::before{
+  content:"";position:absolute;left:.2rem;top:.72em;
+  width:.42rem;height:.42rem;border-radius:50%;background:var(--clay);
+}
+
+.note{
+  background:var(--paper-2);border-left:3px solid var(--clay);
+  padding:.9rem 1.1rem;border-radius:0 var(--r) var(--r) 0;margin:1.6rem 0;
+}
+.note p{margin:0;font-size:.9rem;color:var(--ink-2)}
+
+.facts{
+  width:100%;border-collapse:collapse;margin:0 0 2rem;font-size:.9rem;
+  border:1px solid var(--line);
+}
+.facts caption{
+  text-align:left;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);padding-bottom:.5rem;
+}
+html[lang="ja"] .facts caption{letter-spacing:.06em;text-transform:none;font-size:.78rem}
+.facts th,.facts td{padding:.6rem .9rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.facts th{background:var(--paper-2);color:var(--ink-2);font-weight:600;width:34%}
+.facts tr:last-child th,.facts tr:last-child td{border-bottom:0}
+
+.official{margin:2rem 0 0}
+.official a{font-weight:600}
+
+.updated{margin-top:2.5rem;font-size:.82rem;color:var(--ink-3)}
+
+.related{
+  margin:3rem 0 0;padding:1.4rem 1.5rem;background:var(--paper-2);
+  border-radius:var(--r);border:1px solid var(--line);
+}
+.related h2{
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 .8rem;border:0;padding:0;
+}
+html[lang="ja"] .related h2{letter-spacing:.08em;text-transform:none;font-size:.85rem}
+.related ul{list-style:none;margin:0;padding:0}
+.related li{margin-bottom:.45rem}
+.related a{font-size:.94rem;text-decoration:none;font-weight:500}
+.related a:hover{text-decoration:underline}
+
+/* ---------- form ---------- */
+.contact{margin:2.5rem 0 0;max-width:34rem}
+.field{margin:0 0 1.2rem}
+.field label{display:block;font-size:.88rem;font-weight:600;margin-bottom:.35rem;color:var(--ink-2)}
+.req{color:var(--clay);margin-left:.2rem}
+.contact input[type=text],.contact input[type=email],.contact textarea{
+  width:100%;padding:.6rem .75rem;font:inherit;font-size:.95rem;
+  border:1px solid var(--line-2);border-radius:var(--r);
+  background:#fff;color:var(--ink);
+}
+.contact input:focus,.contact textarea:focus{outline:2px solid var(--forest);outline-offset:1px;border-color:var(--forest)}
+.contact textarea{resize:vertical}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-note{font-size:.82rem;color:var(--ink-3);margin-top:1rem}
+
+/* ---------- footer ---------- */
+.site-foot{background:var(--forest);color:#d8e0da;padding:3rem 0 2rem;font-size:.9rem}
+.foot-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:2rem;margin-bottom:2.5rem}
+.foot-cols h2{
+  font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#9fb3a8;margin:0 0 .8rem;font-weight:600;
+}
+html[lang="ja"] .foot-cols h2{letter-spacing:.08em;text-transform:none;font-size:.82rem}
+.foot-cols ul{list-style:none;margin:0;padding:0}
+.foot-cols li{margin-bottom:.45rem}
+.foot-cols a{color:#d8e0da;text-decoration:none;font-size:.88rem}
+.foot-cols a:hover{color:#fff;text-decoration:underline}
+
+.disclaimer{
+  border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);
+  padding:1.4rem 0;margin-bottom:1.4rem;
+}
+.disclaimer p{margin:0 0 .5rem;font-size:.82rem;color:#b9c8bf;line-height:1.75;max-width:60em}
+.disclaimer p:last-child{margin:0}
+.disclaimer strong{color:#e6ede8}
+
+.colophon{margin:0;font-size:.76rem;color:#8fa398}
+.credit{margin:.35rem 0 0;font-size:.76rem;color:#8fa398}
+.credit a{color:#8fa398;text-decoration:underline}
+.credit a:hover{color:#fff}
+
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  body{font-size:16px}
+  .head-inner{gap:.8rem}
+  .brand{width:100%;margin-right:0}
+  .site-nav{order:3;width:100%}
+  .site-nav ul{gap:1rem}
+  .lang-switch{margin-left:auto}
+  .hero{padding:3rem 0 2.5rem}
+  .band{padding:2.5rem 0}
+  .facts th{width:40%}
+}
+
+@media print{
+  .langbar,.site-nav,.lang-switch,.related,.contact{display:none}
+  body{background:#fff;font-size:11pt}
+  .site-foot{background:none;color:#000;border-top:1px solid #999}
+  .foot-cols a,.colophon,.credit,.disclaimer p{color:#000}
+}
+
+/* ---------- illustration layer ---------- */
+
+.shelf{display:block;width:100%;height:100%}
+
+/* home hero: two stacked shelves behind the copy */
+.hero{position:relative;overflow:hidden}
+.hero-art{
+  position:absolute;left:0;right:0;bottom:0;top:auto;
+  pointer-events:none;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.hero-art-row{width:100%;line-height:0}
+.hero-art-row.lower{opacity:.78}
+.hero .wrap{position:relative;z-index:1}
+.hero{
+  padding-bottom:7.5rem;
+  background:
+    radial-gradient(1100px 380px at 12% -10%, #eef2ec 0%, transparent 70%),
+    var(--paper);
+}
+/* keep the copy legible over the shelves */
+.hero::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:72%;
+  background:linear-gradient(180deg, var(--paper) 62%, rgba(250,248,244,0) 100%);
+  pointer-events:none;z-index:0;
+}
+
+/* page header band */
+.band-art{
+  line-height:0;border-bottom:1px solid var(--line);
+  height:150px;overflow:hidden;
+  background:linear-gradient(180deg,#f4f1ea 0%, var(--paper) 100%);
+}
+.band-art .shelf{height:178px}
+
+/* card marks */
+.card{position:relative}
+.card-mark{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--paper-2);border:1px solid var(--line);
+  margin-bottom:.85rem;
+}
+.band.alt .card-mark{background:var(--paper-2)}
+.card:hover .card-mark{border-color:currentColor}
+.card-mark .cm{display:block}
+.card-mark[data-family="food"]    {background:#eef2ec}
+.card-mark[data-family="standard"]{background:#f6efe2}
+.card-mark[data-family="beauty"]  {background:#f7ece5}
+.card-mark[data-family="home"]    {background:#e9f0ee}
+.card-mark[data-family="brand"]   {background:#f7eee6}
+.card-mark[data-family="guide"]   {background:#eaf0ec}
+
+/* the band sits above the breadcrumb, so pull the crumb up a little */
+.band-art + .crumbs{padding-top:.9rem}
+
+@media (max-width:760px){
+  .band-art{height:100px}
+  .band-art .shelf{height:126px}
+  .hero{padding-bottom:5rem}
+  .card-mark{width:36px;height:36px;margin-bottom:.6rem}
+}
+
+@media print{
+  .band-art,.hero-art{display:none}
+  .card-mark{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .card{transition:none}
+}
