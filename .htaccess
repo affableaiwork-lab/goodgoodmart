@@ -1,0 +1,253 @@
+# =============================================================================
+# goodgoodmart.com — Ethical Pantry / エシカルパントリー
+# Apache configuration for SiteGround (GoGeek)
+#
+# Sections:
+#   1. Canonical host + HTTPS
+#   2. Gone (410) — dead commerce endpoints from the former store
+#   3. 301 redirect map — recovered from Wayback, see LINK-PRESERVATION.md
+#   4. Error documents
+#   5. Compression, caching, security headers
+#
+# Every 301 target below is a real page with real content. Do not add a rule
+# whose target does not yet exist — Google treats a redirect into a thin or
+# missing page as a soft-404 and the link equity is lost anyway.
+# =============================================================================
+
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# -----------------------------------------------------------------------------
+# 1. Canonical host + HTTPS  (non-www, https)
+# -----------------------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://goodgoodmart.com/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^www\.goodgoodmart\.com$ [NC]
+RewriteRule ^(.*)$ https://goodgoodmart.com/$1 [R=301,L]
+
+# Legacy subdomains from the former store. Do not recreate these hosts;
+# if DNS still resolves them, send everything to the apex.
+RewriteCond %{HTTP_HOST} ^(staging|apps)\.goodgoodmart\.com$ [NC]
+RewriteRule ^(.*)$ https://goodgoodmart.com/ [R=301,L]
+
+# -----------------------------------------------------------------------------
+# 2. Gone (410) — transactional endpoints of the store that closed in 2023.
+#    These carry no equity and should leave the index quickly.
+#    410 is deliberate: it is faster to drop than a 404 and honest about why.
+# -----------------------------------------------------------------------------
+RewriteRule ^shop/cart                 - [G,L]
+RewriteRule ^shop/customers            - [G,L]
+RewriteRule ^shop/orders               - [G,L]
+RewriteRule ^shop/checkout             - [G,L]
+RewriteRule ^shop/mypage               - [G,L]
+RewriteRule ^shop/favorites            - [G,L]
+RewriteRule ^shop/gg_search_result     - [G,L]
+RewriteRule ^payment_methods           - [G,L]
+RewriteRule ^shipping_carriers         - [G,L]
+RewriteRule ^shop/contact/draft        - [G,L]
+
+# -----------------------------------------------------------------------------
+# 3. 301 redirect map
+#    QSD drops the old tracking query strings (?utm_source, ?fd_bridge_id,
+#    ?gclid, ?ldtag_cl, ?fbclid) so they do not carry into the new URLs.
+# -----------------------------------------------------------------------------
+
+# --- 3.1 Maker categories -> maker profiles ----------------------------------
+# Highest-value rules on the site. CNET Japan, Time Out Tokyo and Business
+# Insider Japan all point into this block.
+RewriteRule ^shop/product_categories/vegheet-maker/?$        /makers/vegheet/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/fermenstation-maker/?$  /makers/fermenstation/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/beigic-maker/?$         /makers/beigic/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/cocowell/?$             /makers/cocowell/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/paplus/?$               /makers/paplus/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/littlebranch-maker/?$   /makers/little-branch/ [R=301,L,QSD]
+
+# Time Out Tokyo, sustainable kitchenware feature. No verified profile for this
+# maker, so it lands on the kitchenware category, which is topically correct.
+RewriteRule ^shop/product_categories/sunaho-maker/?$         /kitchen/ [R=301,L,QSD]
+
+# --- 3.2 Attribute categories ------------------------------------------------
+RewriteRule ^shop/product_categories/plant-?based/?$          /plantbased/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/allergen-?free/?$        /allergen-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/gluten-?free/?$          /gluten-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/non-?msg/?$              /non-msg/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/organic/?$               /organic/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/additive-?free/?$        /additive-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/fair-?trade/?$           /fairtrade/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/cruelty-?free/?$         /cruelty-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/food-?loss/?$            /food-loss/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/upcycle/?$               /upcycle/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/plasticfree/?$           /plastic-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/biodegradable/?$         /plastic-free/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/environment.*friendly/?$ /eco-friendly/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/social-?welfare/?$       /social-welfare/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/small-?producer/?$       /small-producers/ [R=301,L,QSD]
+
+# --- 3.3 Product-type categories ---------------------------------------------
+RewriteRule ^shop/product_categories/superfood.*$             /superfood/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/soymeat.*$               /soy-meat/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/plantbasedmilk/?$        /plant-milk/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/veganmilk.*$             /plant-milk/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/seasoning.*$             /seasoning/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/sweets.*$                /sweets/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/drink.*$                 /drinks/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/protein.*$               /protein/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/cereal.*$                /cereal/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/rice-bread-noodle/?$     /rice-bread-noodle/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/ricebreadnoodle.*$       /rice-bread-noodle/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/rice/?$                  /rice-bread-noodle/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/instant-?noodle.*$       /instant-noodle/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/frozen/?$                /frozen/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/jam/?$                   /jam/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/skincare/?$              /skincare/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/facewash/?$              /skincare/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/haircare/?$              /haircare/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/bodycare/?$              /bodycare/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/makeup/?$                /makeup/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/cosme.*$                 /cosme/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/shojincosme-maker/?$     /cosme/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/beauty.*$                /beauty/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/all-beauty-plantbased/?$ /beauty/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/kitchen.*$               /kitchen/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/bag/?$                   /bags/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/goods/?$                 /goods/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/dailyuse/?$              /daily-use/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/local/?$                 /local/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/subscription/?$          /guides/subscription-boxes/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/ethical-food/?$          /food/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/pre-?packaged.*$         /food/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/prepackaged.*$           /food/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/ingredient/?$            /food/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/food.*$                  /food/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/life.*$                  /life/ [R=301,L,QSD]
+
+# The old store's own house brand and the sale/staff-pick shelves.
+RewriteRule ^shop/product_categories/goodgoodmart/?$          / [R=301,L,QSD]
+RewriteRule ^shop/product_categories/original.*$              / [R=301,L,QSD]
+RewriteRule ^shop/product_categories/sale.*$                  / [R=301,L,QSD]
+RewriteRule ^shop/product_categories/set.*$                   / [R=301,L,QSD]
+RewriteRule ^shop/product_categories/staff-recommend/?$       / [R=301,L,QSD]
+RewriteRule ^shop/product_categories/brand/?$                 /makers/ [R=301,L,QSD]
+RewriteRule ^shop/product_categories/category/?$              /categories/ [R=301,L,QSD]
+
+# --- 3.4 Product pages with confirmed inbound editorial links ----------------
+RewriteRule ^shop/products/v00667/?$      /allergen-free/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00666/?$      /guides/vegan-cafe-pickup/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00808/?$      /makers/cocowell/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00543/?$      /guides/upcycled-tableware/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00209/?$      /makers/beigic/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00408/?$      /guides/plant-based-japan/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00632/?$      /guides/vegan-leather/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00593/?$      /guides/subscription-boxes/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00424/?$      /guides/subscription-boxes/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00507/?$      /plastic-free/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00554/?$      /seasoning/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00720/?$      /sweets/ [R=301,L,QSD]
+RewriteRule ^shop/products/v0022[23]/?$   /seasoning/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00332/?$      /seasoning/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00254/?$      /local/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00627/?$      /plant-milk/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00630/?$      /goods/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00763/?$      /guides/plant-based-japan/ [R=301,L,QSD]
+RewriteRule ^shop/products/v00909/?$      /superfood/ [R=301,L,QSD]
+RewriteRule ^shop/products/vegewel002/?$  /guides/plant-based-japan/ [R=301,L,QSD]
+
+# --- 3.5 Information and structural pages ------------------------------------
+RewriteRule ^shop/information/10/?$              /makers/beigic/ [R=301,L,QSD]
+RewriteRule ^shop/information/littlebranch/?$    /makers/little-branch/ [R=301,L,QSD]
+RewriteRule ^shop/information/closeannounce/?$   /about/history/ [R=301,L,QSD]
+RewriteRule ^shop/information/49/?$              /guides/ [R=301,L,QSD]
+RewriteRule ^shop/information.*$                 /guides/ [R=301,L,QSD]
+RewriteRule ^shop/base_info/?$                   /about/ [R=301,L,QSD]
+RewriteRule ^shop/contact/?$                     /contact/ [R=301,L,QSD]
+RewriteRule ^shop/customer_term/?$               /terms/ [R=301,L,QSD]
+RewriteRule ^info/customer_term/?$               /terms/ [R=301,L,QSD]
+RewriteRule ^info/privacy/?$                     /privacy/ [R=301,L,QSD]
+RewriteRule ^lp(/.*)?$                           / [R=301,L,QSD]
+
+# --- 3.6 Catch-alls for the long tail ----------------------------------------
+# Anything else under the old store paths. These land on real index pages,
+# never on a 404, and never on a thin page.
+RewriteRule ^shop/product_categories(/.*)?$  /categories/ [R=301,L,QSD]
+RewriteRule ^shop/products(/.*)?$            / [R=301,L,QSD]
+RewriteRule ^shop/?$                         / [R=301,L,QSD]
+RewriteRule ^shop(/.*)?$                     / [R=301,L,QSD]
+
+# --- 3.7 Trailing slash normalisation for the new site -----------------------
+# /plantbased  ->  /plantbased/   (directory-style URLs, one canonical form)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.+)$ /$1/ [R=301,L]
+
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# 4. Error documents
+# -----------------------------------------------------------------------------
+ErrorDocument 404 /404.html
+ErrorDocument 410 /410.html
+
+# -----------------------------------------------------------------------------
+# 5. Performance and security
+# -----------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                 "access plus 1 hour"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType application/xml           "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # CSP: this site loads no third-party scripts, styles, fonts or images.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  # Content-hashed assets (style.<hash>.css) may be cached hard and forever -
+  # the filename changes whenever the file does.
+  <FilesMatch "\.[0-9a-f]{10}\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # Everything else that is not fingerprinted gets a short life and must
+  # revalidate, so an update is never invisible to a returning visitor.
+  <FilesMatch "\.(svg|woff2|png|jpe?g|webp)$">
+    Header set Cache-Control "public, max-age=604800, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "^style\.css$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+AddDefaultCharset UTF-8
+<IfModule mod_mime.c>
+  AddType image/svg+xml .svg
+  AddType application/xml .xml
+</IfModule>
+
+# Block access to source and dotfiles
+<FilesMatch "^\.|\.(py|md|bak|log|sql|ini)$">
+  Require all denied
+</FilesMatch>
